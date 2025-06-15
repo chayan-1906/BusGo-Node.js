@@ -1,8 +1,9 @@
 import express from "express";
 import 'colors';
 import cors from "cors";
-import {connectDB} from "./config/connect";
 import {PORT} from "./config/config";
+import {connectDB} from "./config/connect";
+import {buildAdminJS} from "./config/setup";
 import userRoutes from "./routes/UserRoutes";
 import busRoutes from "./routes/BusRoutes";
 import ticketRoutes from "./routes/TicketRoutes";
@@ -25,6 +26,7 @@ app.use('/api/v1/ticket', ticketRoutes);
 const start = async () => {
     try {
         await connectDB();
+        await buildAdminJS(app);
         app.listen({port: PORT, host: '0.0.0.0'}, (error?: Error, address?: string) => {
             if (error) {
                 console.log('Error in starting server'.red.bold, error.message);

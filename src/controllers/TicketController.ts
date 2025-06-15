@@ -1,5 +1,5 @@
 import 'colors';
-import {Response} from "express";
+import {Request, Response} from "express";
 import {ApiResponse} from "../utils/ApiResponse";
 import {AuthRequest} from "../middleware/AuthMiddleware";
 import TicketModel, {ITicket} from "../models/TicketSchema";
@@ -7,9 +7,9 @@ import BusModel, {IBus, ISeat} from "../models/BusSchema";
 import {generateMissingCode, generateNotFoundCode} from "../utils/generateErrorCodes";
 import UserModel, {IUser} from "../models/UserSchema";
 
-export const getTicketsForUser = async (req: AuthRequest, res: Response) => {
+export const getTicketsForUser = async (req: Request, res: Response) => {
     try {
-        const userExternalId: string = req.userExternalId;
+        const {userExternalId} = req as AuthRequest;
 
         /*const tickets: ITicket[] = await TicketModel.find({userExternalId})
             .populate<{ bus: IBus }>('bus', ['busId busExternalId from to company departureTime arrivalTime place'])
@@ -33,9 +33,9 @@ export const getTicketsForUser = async (req: AuthRequest, res: Response) => {
     }
 }
 
-export const bookTicket = async (req: AuthRequest, res: Response) => {
+export const bookTicket = async (req: Request, res: Response) => {
     try {
-        const userExternalId = req.userExternalId;
+        const {userExternalId} = req as AuthRequest;
 
         const user: IUser | null = await UserModel.findOne({userExternalId});
         if (!user) {

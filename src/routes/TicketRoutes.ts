@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {bookTicket, getTicketsForUser} from "../controllers/TicketController";
 import {authMiddleware} from "../middleware/AuthMiddleware";
+import {bookTicket, getTicketsForUser} from "../controllers/TicketController";
 
 const router = Router();
 

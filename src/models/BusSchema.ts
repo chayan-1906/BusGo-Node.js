@@ -1,12 +1,12 @@
 import {Document, Model, model, Schema} from "mongoose";
 import generateNanoIdWithAlphabet from "../utils/generateUUID";
 
-export interface ISeat extends Document {
+export interface ISeat {
     seatId: number;
     seatType: 'window' | 'side' | 'path';
     isBooked: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 interface ISeatModel extends Model<ISeat> {
