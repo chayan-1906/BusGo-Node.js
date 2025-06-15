@@ -1,7 +1,6 @@
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import {NextFunction, Request, Response} from "express";
 import {ACCESS_TOKEN_SECRET} from "../config/config";
-import "./types";
 
 export interface AuthRequest extends Request {
     userExternalId: string;

@@ -1,7 +1,6 @@
 import 'colors';
 import {Response} from "express";
 import {ApiResponse} from "../utils/ApiResponse";
-import "./types";
 import {AuthRequest} from "../middleware/AuthMiddleware";
 import TicketModel, {ITicket} from "../models/TicketSchema";
 import BusModel, {IBus, ISeat} from "../models/BusSchema";
