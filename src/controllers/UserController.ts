@@ -1,14 +1,14 @@
 import 'colors';
 import {Request, Response} from "express";
 import {OAuth2Client} from "google-auth-library";
-import {ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, GOOGLE_CLIENT_ID, REFRESH_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET} from "../config/config";
+import {ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET, WEB_GOOGLE_CLIENT_ID} from "../config/config";
 import jwt, {SignOptions} from "jsonwebtoken";
 import {ApiResponse} from "../utils/ApiResponse";
 import UserModel, {IUser} from "../models/UserSchema";
 import {generateMissingCode, generateNotFoundCode} from "../utils/generateErrorCodes";
 import {AuthRequest} from "../middleware/AuthMiddleware";
 
-const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(WEB_GOOGLE_CLIENT_ID);
 
 const generateTokens = (user: IUser) => {
     const accessToken = jwt.sign(
@@ -28,14 +28,18 @@ const generateTokens = (user: IUser) => {
 
 export const authenticate = async (req: Request, res: Response) => {
     const {idToken}: { idToken: string; } = req.body;
+    console.log(idToken);
 
     try {
-        const {getPayload} = await client.verifyIdToken({
+        console.log('inside try');
+        const ticket = await client.verifyIdToken({
             idToken,
-            audience: GOOGLE_CLIENT_ID,
+            audience: WEB_GOOGLE_CLIENT_ID,
         });
+        const payload = ticket.getPayload();
+        console.log('getPayload:', payload);
 
-        const {email, sub: googleId, name, picture: profilePicture, email_verified} = getPayload() || {};
+        const {email, sub: googleId, name, picture: profilePicture, email_verified} = payload || {};
         if (!email_verified) {
             res.status(400).send(new ApiResponse({
                 success: false,

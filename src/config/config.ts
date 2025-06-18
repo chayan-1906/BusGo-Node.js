@@ -3,7 +3,7 @@ import 'dotenv/config';
 export const {
     PORT,
     MONGO_URI,
-    GOOGLE_CLIENT_ID,
+    WEB_GOOGLE_CLIENT_ID,
     ANDROID_GOOGLE_GOOGLE_CLIENT_ID,
     IOS_GOOGLE_GOOGLE_CLIENT_ID,
     ACCESS_TOKEN_SECRET,
