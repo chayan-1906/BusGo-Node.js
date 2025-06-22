@@ -7,7 +7,7 @@ import BusModel, {IBus} from "../models/BusSchema";
 export const getBusDetails = async (req: Request, res: Response) => {
     try {
         // const {busId: busExternalId} = req.params;
-        const {busId: busExternalId} = req.query;
+        const {busId: busExternalId}: {busId?: string} = req.query;
         if (!busExternalId) {
             res.status(400).send(new ApiResponse({
                 success: false,
@@ -44,7 +44,7 @@ export const getBusDetails = async (req: Request, res: Response) => {
 
 export const searchBuses = async (req: Request, res: Response) => {
     try {
-        const {from, to, date}: { from: string; to: string; date: string; } = req.body;
+        const {from, to, date}: { from?: string; to?: string; date?: string; } = req.query;
         if (!from) {
             res.status(400).send(new ApiResponse({
                 success: false,

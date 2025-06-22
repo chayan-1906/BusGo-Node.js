@@ -6,17 +6,21 @@ import TicketModel, {ITicket} from "../models/TicketSchema";
 import BusModel, {IBus, ISeat} from "../models/BusSchema";
 import {generateMissingCode, generateNotFoundCode} from "../utils/generateErrorCodes";
 import UserModel, {IUser} from "../models/UserSchema";
+import {IPopulatedTicket} from "../interfaces";
 
 export const getTicketsForUser = async (req: Request, res: Response) => {
+    console.log('getTicketsForUser called');
     try {
-        const {userExternalId} = req as AuthRequest;
+        const {userExternalId}: { userExternalId: string } = req as AuthRequest;
 
         /*const tickets: ITicket[] = await TicketModel.find({userExternalId})
             .populate<{ bus: IBus }>('bus', ['busId busExternalId from to company departureTime arrivalTime place'])
             .sort({bookedAt: -1});*/
-        const tickets: ITicket[] = await TicketModel.find({userExternalId})
+        const tickets: IPopulatedTicket[] = await TicketModel.find({userExternalId})
             .populate<{ bus: Pick<IBus, 'busId' | 'busExternalId' | 'from' | 'to' | 'busType' | 'company' | 'departureTime' | 'arrivalTime' | 'price'> }>('bus')
-            .sort({bookedAt: -1});  // sorted by recently
+            .sort({bookedAt: -1});  // sorted by recency
+
+        console.log('tickets:'.white.bgGreen.bold, tickets);
 
         res.status(200).send(new ApiResponse({
             success: true,
@@ -34,6 +38,7 @@ export const getTicketsForUser = async (req: Request, res: Response) => {
 }
 
 export const bookTicket = async (req: Request, res: Response) => {
+    console.log('bookTicket called:', req.body);
     try {
         const {userExternalId} = req as AuthRequest;
 
@@ -104,6 +109,8 @@ export const bookTicket = async (req: Request, res: Response) => {
             });
         });
         await bus.save();
+
+        console.log('Booked ticket:'.white.bgGreen.bold, ticket);
 
         res.status(201).send(new ApiResponse({
             success: true,

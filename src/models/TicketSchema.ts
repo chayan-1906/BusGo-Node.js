@@ -76,6 +76,7 @@ const TicketSchema = new Schema<ITicket>({
 }, {
     timestamps: true,
     toJSON: {
+        virtuals: true,
         transform(doc, ret) {
             ret.ticketId = ret._id;
             delete ret._id;
@@ -87,6 +88,14 @@ const TicketSchema = new Schema<ITicket>({
             } as ITicket;
         },
     },
+    toObject: {virtuals: true},
+});
+
+TicketSchema.virtual('bus', {
+    ref: 'Bus',
+    localField: 'busId',
+    foreignField: '_id',
+    justOne: true,
 });
 
 const TicketModel = model<ITicket, ITicketModel>('Ticket', TicketSchema);
