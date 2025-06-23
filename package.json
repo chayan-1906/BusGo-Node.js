@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
-    "seed:data": "ts-node src/seedScript.ts",
+    "seed:data": "NODE_OPTIONS='--max-old-space-size=8192' ts-node src/seedScript.ts",
     "build": "tsc"
   },
   "dependencies": {

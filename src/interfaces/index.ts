@@ -6,7 +6,7 @@ export interface IPopulatedTicket extends Omit<ITicket, 'busId'> {
         busExternalId: string;
         from: string;
         to: string;
-        busType: string;
+        busTags: string[];
         company: string;
         departureTime: Date;
         arrivalTime: Date;

@@ -17,10 +17,10 @@ export const getTicketsForUser = async (req: Request, res: Response) => {
             .populate<{ bus: IBus }>('bus', ['busId busExternalId from to company departureTime arrivalTime place'])
             .sort({bookedAt: -1});*/
         const tickets: IPopulatedTicket[] = await TicketModel.find({userExternalId})
-            .populate<{ bus: Pick<IBus, 'busId' | 'busExternalId' | 'from' | 'to' | 'busType' | 'company' | 'departureTime' | 'arrivalTime' | 'price'> }>('bus')
+            .populate<{ bus: Pick<IBus, 'busId' | 'busExternalId' | 'from' | 'to' | 'busTags' | 'company' | 'departureTime' | 'arrivalTime' | 'price'> }>('bus')
             .sort({bookedAt: -1});  // sorted by recency
 
-        console.log('tickets:'.white.bgGreen.bold, tickets);
+        console.log('tickets length:'.white.bgGreen.bold, tickets.length);
 
         res.status(200).send(new ApiResponse({
             success: true,
@@ -88,6 +88,7 @@ export const bookTicket = async (req: Request, res: Response) => {
             return;
         }
 
+        console.log('available seats before booking:', bus.availableSeats);
         const unavailableSeats = seatNumbers.filter((seatNum: number) => bus.seats?.some((row) => row?.some((seat: ISeat) => seat.seatId === seatNum && seat.isBooked)));
         if (unavailableSeats.length > 0) {
             res.status(400).send(new ApiResponse({
@@ -108,7 +109,9 @@ export const bookTicket = async (req: Request, res: Response) => {
                 }
             });
         });
-        await bus.save();
+        bus.availableSeats -= seatNumbers.length;
+        const updatedBus = await bus.save();
+        console.log(`available seats after booking ${seatNumbers.length} seats:`, updatedBus.availableSeats);
 
         console.log('Booked ticket:'.white.bgGreen.bold, ticket);
 

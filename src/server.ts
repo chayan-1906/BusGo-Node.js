@@ -5,6 +5,7 @@ import {PORT} from "./config/config";
 import {connectDB} from "./config/connect";
 import {buildAdminJS} from "./config/setup";
 import userRoutes from "./routes/UserRoutes";
+import cityRoutes from "./routes/CityRoutes";
 import busRoutes from "./routes/BusRoutes";
 import ticketRoutes from "./routes/TicketRoutes";
 
@@ -20,6 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/city', cityRoutes);
 app.use('/api/v1/bus', busRoutes);
 app.use('/api/v1/ticket', ticketRoutes);
 

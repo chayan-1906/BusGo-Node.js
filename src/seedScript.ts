@@ -2,7 +2,7 @@ import "colors";
 import mongoose from "mongoose";
 import {connectDB} from "./config/connect";
 import BusModel, {IBus} from "./models/BusSchema";
-import {buses, generateSeats, locations} from './seedData';
+import {buses, cities, generateSeats} from './seedData';
 import generateNanoIdWithAlphabet from "./utils/generateUUID";
 
 const generateRandomTime = (baseDate: Date) => {
@@ -24,48 +24,58 @@ async function seedDatabase() {
 
         const busesToInsert: Partial<IBus>[] = [];
         console.log('Generating buses 🚌'.yellow.bold);
-        for (let i = 0; i < locations.length; i++) {
-            for (let j = i + 1; j < locations?.length; j++) {
-                const from = locations[i];
-                const to = locations[j];
+        for (const from of cities) {
+            for (const to of cities) {
+                if (from === to) continue; // Skip same-city routes
 
-                const baseDate = new Date();
                 for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-                    const travelDate = new Date(baseDate);
+                    const travelDate = new Date();
                     travelDate.setDate(travelDate.getDate() + dayOffset);
 
-                    const returnDate = new Date(travelDate);
-                    returnDate.setDate(returnDate.getDate() + 1);
+                    for (let k = 0; k < 5; k++) {
+                        const bus = buses[k % buses.length]; // rotate 5 buses
 
+                        // Departure time
+                        const departureTime = generateRandomTime(travelDate);
 
-                    buses.forEach(({busId, company, busType, price, originalPrice, rating, totalReviews, badges}) => {
+                        // Simulate journey duration: 4–15 hours + 0 or 30 mins
+                        const travelHours = Math.floor(Math.random() * 12) + 4; // 4–15
+                        const travelMinutes = Math.random() > 0.5 ? 30 : 0;
+
+                        // Arrival time
+                        const arrivalTime = new Date(departureTime);
+                        arrivalTime.setHours(arrivalTime.getHours() + travelHours);
+                        arrivalTime.setMinutes(arrivalTime.getMinutes() + travelMinutes);
+
+                        // Duration string
+                        const totalMinutes = Math.floor((arrivalTime.getTime() - departureTime.getTime()) / 60000);
+                        const hours = Math.floor(totalMinutes / 60);
+                        const minutes = totalMinutes % 60;
+                        const duration = `${hours}h ${minutes}m`;
+
                         busesToInsert.push({
-                            busId: `${busId}_${from}_${to}_${dayOffset}`,
+                            busId: `${bus.busId}_${from}_${to}_${dayOffset}_${k}`,
                             busExternalId: generateNanoIdWithAlphabet(),
-                            from, to,
-                            departureTime:generateRandomTime(travelDate),
-                            arrivalTime: generateRandomTime(travelDate),
-                            duration: '9h 30m',
+                            from,
+                            to,
+                            departureTime,
+                            arrivalTime,
+                            duration,
                             availableSeats: 28,
-                            price, originalPrice, company, busType, rating, totalReviews, badges,
+                            price: bus.price,
+                            originalPrice: bus.originalPrice,
+                            company: bus.company,
+                            busTags: bus.busTags,
+                            rating: bus.rating,
+                            totalReviews: bus.totalReviews,
+                            badges: bus.badges,
                             seats: generateSeats(),
                         });
-
-                        busesToInsert.push({
-                            busId: `${busId}_${to}_${from}_${dayOffset + 1}`,
-                            busExternalId: generateNanoIdWithAlphabet(),
-                            from, to,
-                            departureTime: generateRandomTime(returnDate),
-                            arrivalTime: generateRandomTime(returnDate),
-                            duration: '9h 30m',
-                            availableSeats: 28,
-                            price, originalPrice, company, busType, rating, totalReviews, badges,
-                            seats: generateSeats(),
-                        });
-                    });
+                    }
                 }
             }
         }
+
         console.log('Buses generation finished 🚌'.yellow.bold);
 
         console.log('About to start saving buses ℹ️'.blue.bold);

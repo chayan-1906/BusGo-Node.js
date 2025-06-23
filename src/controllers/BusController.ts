@@ -43,8 +43,9 @@ export const getBusDetails = async (req: Request, res: Response) => {
 }
 
 export const searchBuses = async (req: Request, res: Response) => {
+    console.log('searchBuses called:', req.query);
     try {
-        const {from, to, date}: { from?: string; to?: string; date?: string; } = req.query;
+        const {from, to, date, tags, sortBy}: { from?: string; to?: string; date?: string; tags?: string; sortBy?: string; } = req.query;
         if (!from) {
             res.status(400).send(new ApiResponse({
                 success: false,
@@ -74,11 +75,20 @@ export const searchBuses = async (req: Request, res: Response) => {
         const startOfDay = new Date(selectedDate.setHours(0, 0, 0, 0));
         const endOfDay = new Date(selectedDate.setHours(23, 59, 59, 999));
 
-        const buses: IBus[] = await BusModel.find({
+        const filter: any = {
             from,
             to,
             departureTime: {$gte: startOfDay, $lte: endOfDay},
-        });
+        };
+
+        if (tags) {
+            const parsedTags = tags.split(',') ?? [];
+            filter.busTags = {$in: parsedTags};
+        }
+
+        const sortField = sortBy || 'departureTime';
+        const buses = await BusModel.find(filter).sort({[sortField]: 1});
+        console.log('Buses found', buses.length);
 
         res.status(200).send(new ApiResponse({
             success: true,

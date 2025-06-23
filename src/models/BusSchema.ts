@@ -44,7 +44,7 @@ export interface IBus extends Document {
     price: number;
     originalPrice: number;
     company: string;
-    busType: string;
+    busTags: string[];
     rating: number;
     totalReviews: number;
     badges: string[];
@@ -104,8 +104,8 @@ const BusSchema = new Schema<IBus>({
         type: String,
         required: true,
     },
-    busType: {
-        type: String,
+    busTags: {
+        type: [String],
         required: true,
     },
     rating: {
