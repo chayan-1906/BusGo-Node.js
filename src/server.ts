@@ -3,7 +3,6 @@ import cors from "cors";
 import express from "express";
 import {PORT} from "./config/config";
 import {connectDB} from "./config/connect";
-import './utils/cronJob';
 import getLocalIp from "./utils/getLocalIP";
 import {buildAdminJS} from "./config/setup";
 import userRoutes from "./routes/UserRoutes";
