@@ -14,7 +14,7 @@ async function startCronJob() {
     // Run every Sunday at 2:00 AM UTC
     // Cron format: minute hour day-of-month month day-of-week
     // 0 2 * * 0 = At 2:00 AM on Sunday (0 = Sunday)
-    const cronJob = cron.schedule('30 12 * * 2', async () => {
+    const cronJob = cron.schedule('40 12 * * 2', async () => {
         console.log('\n⏰ Cron job triggered - Starting database seeding...'.magenta.bold);
         await seedDatabase();
     });
