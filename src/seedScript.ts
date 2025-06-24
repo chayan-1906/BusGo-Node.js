@@ -56,9 +56,6 @@ export async function seedDatabase() {
 
                         // Duration string
                         const totalMinutes = Math.floor((arrivalTime.getTime() - departureTime.getTime()) / 60000);
-                        const hours = Math.floor(totalMinutes / 60);
-                        const minutes = totalMinutes % 60;
-                        const duration = `${hours}h ${minutes}m`;
 
                         busesToInsert.push({
                             busId: `${bus.busId}_${from}_${to}_${dayOffset}_${k}`,
@@ -67,7 +64,7 @@ export async function seedDatabase() {
                             to,
                             departureTime,
                             arrivalTime,
-                            duration,
+                            duration: totalMinutes,
                             availableSeats: 28,
                             price: bus.price,
                             originalPrice: bus.originalPrice,

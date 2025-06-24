@@ -39,7 +39,7 @@ export interface IBus extends Document {
     to: string;
     departureTime: Date;
     arrivalTime: Date;
-    duration: string;
+    duration: number;
     availableSeats: number;
     price: number;
     originalPrice: number;
@@ -84,9 +84,8 @@ const BusSchema = new Schema<IBus>({
         type: Date,
         required: true,
     },
-    // TODO: Make it number (in min)
     duration: {
-        type: String,
+        type: Number,
         required: true,
     },
     availableSeats: {

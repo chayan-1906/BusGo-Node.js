@@ -93,8 +93,7 @@ export const searchBuses = async (req: Request, res: Response) => {
             sortOrder = 'desc';
         }
         const sortField = sortBy || 'departureTime';
-        const buses = await BusModel.find(filter)
-        // .sort({[sortField]: sortOrder});
+        const buses = await BusModel.find(filter).sort({[sortField]: sortOrder});
         console.log('Buses found', buses.length);
 
         res.status(200).send(new ApiResponse({
