@@ -1,12 +1,6 @@
 import cron from "node-cron";
 import {seedDatabase} from "../seedScript";
 
-function getNextRunTime(): string {
-    const nextRun = new Date();
-    nextRun.setDate(nextRun.getDate() + 7);
-    return nextRun.toLocaleString();
-}
-
 async function startCronJob() {
     console.log('🚀 Starting weekly database seeding cron job...'.magenta.bold);
     console.log('📅 Schedule: Every Sunday at 2:00 AM UTC'.cyan);
@@ -16,14 +10,16 @@ async function startCronJob() {
     // 0 2 * * 0 = At 2:00 AM on Sunday (0 = Sunday)
     const cronJob = cron.schedule('55 12 * * 2', async () => {
         console.log('\n⏰ Cron job triggered - Starting database seeding...'.magenta.bold);
+        process.env.NODE_OPTIONS = '--max-old-space-size=8192';
         await seedDatabase();
     });
 
     // Optional: Run immediately on startup (for testing)
     // Uncomment the line below if you want to seed immediately when the cron starts
-    if (process.env.SEED_ON_START === 'true') {
+    /*if (process.env.SEED_ON_START === 'true') {
+        process.env.NODE_OPTIONS = '--max-old-space-size=8192';
         await seedDatabase();
-    }
+    }*/
 
     // Graceful shutdown handling
     process.on('SIGTERM', () => {
@@ -44,6 +40,8 @@ async function startCronJob() {
 }
 
 // Start the cron job
+/*
 if (require.main === module) {
     startCronJob();
 }
+*/

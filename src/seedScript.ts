@@ -35,7 +35,7 @@ export async function seedDatabase() {
             for (const to of cities) {
                 if (from === to) continue; // Skip same-city routes
 
-                for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+                for (let dayOffset = 0; dayOffset < 30; dayOffset++) {
                     const travelDate = new Date();
                     travelDate.setDate(travelDate.getDate() + dayOffset);
 
@@ -98,11 +98,11 @@ export async function seedDatabase() {
         console.error('Error in seeding database:'.red.bold, error);
     } finally {
         // Only close if connection exists and is open
-        if (mongoose.connection.readyState === 1) {
+        /*if (mongoose.connection.readyState === 1) {
             await mongoose.connection.close();
             console.log('🔌 Database connection closed'.gray);
-        }
+        }*/
     }
 }
 
-seedDatabase();
+// seedDatabase();

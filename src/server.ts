@@ -9,6 +9,7 @@ import userRoutes from "./routes/UserRoutes";
 import cityRoutes from "./routes/CityRoutes";
 import busRoutes from "./routes/BusRoutes";
 import ticketRoutes from "./routes/TicketRoutes";
+import seedRoutes from "./routes/SeedRoutes";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/city', cityRoutes);
 app.use('/api/v1/bus', busRoutes);
 app.use('/api/v1/ticket', ticketRoutes);
+app.use('/api/v1/seed', seedRoutes);
 
 const start = async () => {
     try {
