@@ -13,9 +13,6 @@ export const getTicketsForUser = async (req: Request, res: Response) => {
     try {
         const {userExternalId}: { userExternalId: string } = req as AuthRequest;
 
-        /*const tickets: ITicket[] = await TicketModel.find({userExternalId})
-            .populate<{ bus: IBus }>('bus', ['busId busExternalId from to company departureTime arrivalTime place'])
-            .sort({bookedAt: -1});*/
         const tickets: IPopulatedTicket[] = await TicketModel.find({userExternalId})
             .populate<{ bus: Pick<IBus, 'busId' | 'busExternalId' | 'from' | 'to' | 'busTags' | 'company' | 'departureTime' | 'arrivalTime' | 'price'> }>('bus')
             .sort({bookedAt: -1});  // sorted by recency

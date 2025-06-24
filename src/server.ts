@@ -1,8 +1,9 @@
-import express from "express";
 import 'colors';
 import cors from "cors";
+import express from "express";
 import {PORT} from "./config/config";
 import {connectDB} from "./config/connect";
+import getLocalIp from "./utils/getLocalIP";
 import {buildAdminJS} from "./config/setup";
 import userRoutes from "./routes/UserRoutes";
 import cityRoutes from "./routes/CityRoutes";
@@ -33,7 +34,9 @@ const start = async () => {
             if (error) {
                 console.log('Error in starting server'.red.bold, error.message);
             } else {
-                console.log(`Server started on ${PORT}`.green.italic.bold);
+                console.log(`Server started on ${PORT}`.blue.italic.bold);
+                console.log(`\t- Local:        http://localhost:${PORT}`.blue.bold);
+                console.log(`\t- Network:      http://${getLocalIp()}:${PORT}`.blue.bold);
             }
         });
     } catch (error: any) {

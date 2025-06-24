@@ -38,7 +38,7 @@ export const buses = [
     {
         busId: 'bus_001',
         company: 'Indigo Express',
-        busTags: ['A/C', 'Volvo', 'Sleeper'],
+        busTags: ['A/C', 'Volvo', 'Sleeper', 'Private'],
         price: 849,
         originalPrice: 999,
         rating: 4.5,
@@ -48,7 +48,7 @@ export const buses = [
     {
         busId: 'bus_002',
         company: 'SkyLine Tours',
-        busTags: ['Non A/C'],
+        busTags: ['Non A/C', 'Private'],
         price: 1049,
         originalPrice: 1199,
         rating: 4.7,
@@ -58,7 +58,7 @@ export const buses = [
     {
         busId: 'bus_003',
         company: 'BlueBird Travels',
-        busTags: ['Non A/C', 'Seater'],
+        busTags: ['Non A/C', 'Seater', 'Private'],
         price: 729,
         originalPrice: 849,
         rating: 4.2,
@@ -68,7 +68,7 @@ export const buses = [
     {
         busId: 'bus_004',
         company: 'Royal Roadways',
-        busTags: ['A/C', 'Sleeper'],
+        busTags: ['A/C', 'Sleeper', 'Private'],
         price: 1150,
         originalPrice: 1300,
         rating: 4.8,
@@ -78,7 +78,7 @@ export const buses = [
     {
         busId: 'bus_005',
         company: 'Swift Travels',
-        busTags: ['Non A/C', 'Sleeper'],
+        busTags: ['Non A/C', 'Sleeper', 'Private'],
         price: 769,
         originalPrice: 919,
         rating: 4.1,
@@ -88,7 +88,7 @@ export const buses = [
     {
         busId: 'bus_006',
         company: 'Tranz India',
-        busTags: ['A/C', 'Seater'],
+        busTags: ['A/C', 'Seater', 'Government'],
         price: 985,
         originalPrice: 1150,
         rating: 4.3,
@@ -98,7 +98,7 @@ export const buses = [
     {
         busId: 'bus_007',
         company: 'Blueway Tours',
-        busTags: ['A/C', 'Sleeper'],
+        busTags: ['A/C', 'Sleeper', 'Private'],
         price: 1120,
         originalPrice: 1270,
         rating: 4.6,
@@ -108,7 +108,7 @@ export const buses = [
     {
         busId: 'bus_008',
         company: 'Silverline Express',
-        busTags: ['Non A/C', 'Seater'],
+        busTags: ['Non A/C', 'Seater', 'Private'],
         price: 685,
         originalPrice: 835,
         rating: 3.9,
@@ -118,7 +118,7 @@ export const buses = [
     {
         busId: 'bus_009',
         company: 'TurboWay Buses',
-        busTags: ['A/C', 'Sleeper', 'Volvo'],
+        busTags: ['A/C', 'Sleeper', 'Volvo', 'Private'],
         price: 1210,
         originalPrice: 1410,
         rating: 4.9,
@@ -128,7 +128,7 @@ export const buses = [
     {
         busId: 'bus_010',
         company: 'GoldenRoute',
-        busTags: ['Non A/C', 'Sleeper'],
+        busTags: ['Non A/C', 'Sleeper', 'Private'],
         price: 830,
         originalPrice: 980,
         rating: 4.0,
@@ -138,7 +138,7 @@ export const buses = [
     {
         busId: 'bus_011',
         company: 'Zed Travels',
-        busTags: ['A/C', 'Seater'],
+        busTags: ['A/C', 'Seater', 'Private'],
         price: 940,
         originalPrice: 1090,
         rating: 4.4,
@@ -148,7 +148,7 @@ export const buses = [
     {
         busId: 'bus_012',
         company: 'Orbit Buses',
-        busTags: ['A/C', 'Sleeper'],
+        busTags: ['A/C', 'Sleeper', 'Private'],
         price: 1190,
         originalPrice: 1390,
         rating: 4.6,
@@ -158,7 +158,7 @@ export const buses = [
     {
         busId: 'bus_013',
         company: 'QuickMove Travels',
-        busTags: ['Non A/C', 'Seater'],
+        busTags: ['Non A/C', 'Seater', 'Private'],
         price: 610,
         originalPrice: 760,
         rating: 3.8,
@@ -168,7 +168,7 @@ export const buses = [
     {
         busId: 'bus_014',
         company: 'Starline Coaches',
-        busTags: ['A/C', 'Sleeper'],
+        busTags: ['A/C', 'Sleeper', 'Private'],
         price: 1025,
         originalPrice: 1200,
         rating: 4.5,
@@ -178,7 +178,7 @@ export const buses = [
     {
         busId: 'bus_015',
         company: 'Prime RoadLines',
-        busTags: ['Non A/C', 'Sleeper'],
+        busTags: ['Non A/C', 'Sleeper', 'Government'],
         price: 750,
         originalPrice: 900,
         rating: 4.1,

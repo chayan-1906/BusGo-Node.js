@@ -15,12 +15,19 @@ const generateRandomTime = (baseDate: Date) => {
     return dateTime;
 }
 
-async function seedDatabase() {
+export async function seedDatabase() {
     try {
         await connectDB();
 
-        await BusModel.deleteMany();
-        console.log('Buses deleted'.green.bold);
+        if (mongoose.connection.readyState !== 1) {
+            throw new Error('Database connection not ready');
+        }
+
+        await mongoose.connection.dropDatabase();
+        console.log('Deleted entire database'.green.bold);
+
+        // Wait a bit after dropping database
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         const busesToInsert: Partial<IBus>[] = [];
         console.log('Generating buses 🚌'.yellow.bold);
@@ -79,12 +86,22 @@ async function seedDatabase() {
         console.log('Buses generation finished 🚌'.yellow.bold);
 
         console.log('About to start saving buses ℹ️'.blue.bold);
-        await BusModel.insertMany(busesToInsert);
+        // Insert in smaller batches to avoid timeout
+        const batchSize = 100;
+        for (let i = 0; i < busesToInsert.length; i += batchSize) {
+            const batch = busesToInsert.slice(i, i + batchSize);
+            await BusModel.insertMany(batch);
+            console.log(`✅ Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(busesToInsert.length / batchSize)}`.green);
+        }
         console.log('Database seeded successfully ✅'.green.bold);
     } catch (error: any) {
         console.error('Error in seeding database:'.red.bold, error);
     } finally {
-        await mongoose.connection.close();
+        // Only close if connection exists and is open
+        if (mongoose.connection.readyState === 1) {
+            await mongoose.connection.close();
+            console.log('🔌 Database connection closed'.gray);
+        }
     }
 }
 

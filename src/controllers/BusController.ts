@@ -3,6 +3,7 @@ import {Request, Response} from "express";
 import {ApiResponse} from "../utils/ApiResponse";
 import {generateMissingCode, generateNotFoundCode} from "../utils/generateErrorCodes";
 import BusModel, {IBus} from "../models/BusSchema";
+import {SortOrder} from "mongoose";
 
 export const getBusDetails = async (req: Request, res: Response) => {
     try {
@@ -86,8 +87,13 @@ export const searchBuses = async (req: Request, res: Response) => {
             filter.busTags = {$in: parsedTags};
         }
 
+        let sortOrder: SortOrder = 'asc';  // ascending
+        // descending for rating, totalReviews
+        if (sortBy === 'rating' || sortBy === 'totalReviews' || sortBy === 'availableSeats') {
+            sortOrder = 'desc';
+        }
         const sortField = sortBy || 'departureTime';
-        const buses = await BusModel.find(filter).sort({[sortField]: 1});
+        const buses = await BusModel.find(filter).sort({[sortField]: sortOrder});
         console.log('Buses found', buses.length);
 
         res.status(200).send(new ApiResponse({

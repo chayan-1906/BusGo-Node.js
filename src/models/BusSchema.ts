@@ -30,7 +30,7 @@ const SeatSchema = new Schema<ISeat>({
     timestamps: true,
 });
 
-const SeatModel = model<ISeat, ISeatModel>('Seat', SeatSchema);
+export const SeatModel = model<ISeat, ISeatModel>('Seat', SeatSchema);
 
 export interface IBus extends Document {
     busId: string;
@@ -84,6 +84,7 @@ const BusSchema = new Schema<IBus>({
         type: Date,
         required: true,
     },
+    // TODO: Make it number (in min)
     duration: {
         type: String,
         required: true,
