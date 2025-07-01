@@ -188,6 +188,18 @@ export const buses = [
     },
 ];
 
+// Government bus template for each route
+export const governmentBus = {
+    busId: 'govt_bus',
+    company: 'State Transport Corporation',
+    busTags: ['A/C', 'Seater', 'Govt'],
+    price: 650,
+    originalPrice: 750,
+    rating: 4.0,
+    totalReviews: 300,
+    badges: ['Government Service', 'Affordable', 'Safe Travel'],
+};
+
 export const generateSeats = (): ISeat[][] => {
     const seats: ISeat[] = [];
 

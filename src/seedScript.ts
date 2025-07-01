@@ -2,7 +2,7 @@ import "colors";
 import mongoose from "mongoose";
 import {connectDB} from "./config/connect";
 import BusModel, {IBus} from "./models/BusSchema";
-import {buses, cities, generateSeats} from './seedData';
+import {buses, cities, generateSeats, governmentBus} from './seedData';
 import generateNanoIdWithAlphabet from "./utils/generateUUID";
 
 const generateRandomTime = (baseDate: Date) => {
@@ -14,6 +14,25 @@ const generateRandomTime = (baseDate: Date) => {
 
     return dateTime;
 }
+
+// Ensure each bus has either AC or Non AC while preserving other tags
+const normalizeBusTags = (tags: string[]): string[] => {
+    const hasAC = tags.some(tag => tag === 'A/C');
+    const hasNonAC = tags.some(tag => tag === 'Non A/C');
+
+    // Remove AC tags only
+    const filteredTags = tags.filter(tag => tag !== 'A/C' && tag !== 'Non A/C');
+
+    // Add exactly one AC designation
+    if (hasAC && !hasNonAC) {
+        return ['A/C', ...filteredTags];
+    } else if (hasNonAC && !hasAC) {
+        return ['Non A/C', ...filteredTags];
+    } else {
+        // If both or neither, randomly assign one
+        return Math.random() > 0.5 ? ['A/C', ...filteredTags] : ['Non A/C', ...filteredTags];
+    }
+};
 
 export async function seedDatabase() {
     try {
@@ -39,23 +58,43 @@ export async function seedDatabase() {
                     const travelDate = new Date();
                     travelDate.setDate(travelDate.getDate() + dayOffset);
 
-                    for (let k = 0; k < 5; k++) {
-                        const bus = buses[k % buses.length]; // rotate 5 buses
+                    // First, add government bus for this route
+                    const govDepartureTime = generateRandomTime(travelDate);
+                    const govTravelHours = Math.floor(Math.random() * 12) + 4;
+                    const govTravelMinutes = Math.random() > 0.5 ? 30 : 0;
+                    const govArrivalTime = new Date(govDepartureTime);
+                    govArrivalTime.setHours(govArrivalTime.getHours() + govTravelHours);
+                    govArrivalTime.setMinutes(govArrivalTime.getMinutes() + govTravelMinutes);
 
-                        // Departure time
+                    busesToInsert.push({
+                        busId: `${governmentBus.busId}_${from}_${to}_${dayOffset}`,
+                        busExternalId: generateNanoIdWithAlphabet(),
+                        from,
+                        to,
+                        departureTime: govDepartureTime,
+                        arrivalTime: govArrivalTime,
+                        duration: Math.floor((govArrivalTime.getTime() - govDepartureTime.getTime()) / 60000),
+                        availableSeats: 28,
+                        price: governmentBus.price,
+                        originalPrice: governmentBus.originalPrice,
+                        company: governmentBus.company,
+                        busTags: normalizeBusTags(governmentBus.busTags),
+                        rating: governmentBus.rating,
+                        totalReviews: governmentBus.totalReviews,
+                        badges: governmentBus.badges,
+                        seats: generateSeats(),
+                    });
+
+                    // Then add 4 private buses for this route
+                    for (let k = 0; k < 4; k++) {
+                        const bus = buses[k % buses.length];
+
                         const departureTime = generateRandomTime(travelDate);
-
-                        // Simulate journey duration: 4–15 hours + 0 or 30 mins
-                        const travelHours = Math.floor(Math.random() * 12) + 4; // 4–15
+                        const travelHours = Math.floor(Math.random() * 12) + 4;
                         const travelMinutes = Math.random() > 0.5 ? 30 : 0;
-
-                        // Arrival time
                         const arrivalTime = new Date(departureTime);
                         arrivalTime.setHours(arrivalTime.getHours() + travelHours);
                         arrivalTime.setMinutes(arrivalTime.getMinutes() + travelMinutes);
-
-                        // Duration string
-                        const totalMinutes = Math.floor((arrivalTime.getTime() - departureTime.getTime()) / 60000);
 
                         busesToInsert.push({
                             busId: `${bus.busId}_${from}_${to}_${dayOffset}_${k}`,
@@ -64,12 +103,12 @@ export async function seedDatabase() {
                             to,
                             departureTime,
                             arrivalTime,
-                            duration: totalMinutes,
+                            duration: Math.floor((arrivalTime.getTime() - departureTime.getTime()) / 60000),
                             availableSeats: 28,
                             price: bus.price,
                             originalPrice: bus.originalPrice,
                             company: bus.company,
-                            busTags: bus.busTags,
+                            busTags: normalizeBusTags(bus.busTags),
                             rating: bus.rating,
                             totalReviews: bus.totalReviews,
                             badges: bus.badges,
