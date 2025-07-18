@@ -8,7 +8,7 @@
 
 > Robust Node.js backend for BusGo bus booking application featuring Google OAuth, ticketing logic, secure JWT authentication, and AdminJS dashboard for data management.
 
-  <img src="https://github.com/user-attachments/assets/06a43bd0-2f51-4514-9af2-d9916137570d" width="200" alt="Logo" />
+![logo](https://raw.githubusercontent.com/chayan-1906/Busgo-React-Native/expo-prebuild/assets/images/logo_t.png)
 
 ## ✨ Features
 
